@@ -33,16 +33,22 @@ This assumes you already have GP2040 code locally (if not look at the GP2040 pro
 Create `build` folder in the firmware folder before compiling. It is where the firmware will end up after successful compile.
 You need to run `cmake ..` command only once or when you delete `build` content folder and want to compile for a different board.
 
-This will build default `Pico` variant of the firmware:
+First start a container that will link your source code into the compile environment.
 ```
-docker run -it --rm -v "PATH_TO_LOCAL_GP2040_FIRMWARE":/pico/GP2040 rmamba/gp2040-compile:2.0.0 cmake ..
-docker run -it --rm -v "PATH_TO_LOCAL_GP2040_FIRMWARE":/pico/GP2040 rmamba/gp2040-compile:2.0.0 make
-```
-
-You can select the board with `PICO_BOARD` variable like so:
-```
-docker run -it --rm -v "PATH_TO_LOCAL_GP2040_FIRMWARE":/pico/GP2040 --env PICO_BOARD=waveshare_rp2040_zero rmamba/gp2040-compile:2.0.0 cmake ..
-docker run -it --rm -v "PATH_TO_LOCAL_GP2040_FIRMWARE":/pico/GP2040 --env PICO_BOARD=waveshare_rp2040_zero rmamba/gp2040-compile:2.0.0 make
+docker start -it --name gp2040-compile -v "c:\PATH_TO\GP2040-CE":/pico/GP2040 rmamba/gp2040-compile:2.1.1 /bin/sh
 ```
 
-You can also pass in `GP2040_BOARDCONFIG` variable if you want to build specific configuration.
+After that you can connect to the container and perform firmware compile
+```
+sudo docker run -it --entrypoint /bin/ash gp2040-compile
+```
+
+Once inside the shell of the docker container you can compile the firmare.
+Optionaly you can specify what firmware you want to compile with setting evironment variables first.
+If no options are provided the default `Pico` firmware will be compiled.
+```
+#export GP2040_BOARDCONFIG=KeyboardController
+#export PICO_BOARD=waveshare_rp2040_zero
+cmake ..
+mmake
+```
