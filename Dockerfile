@@ -5,7 +5,7 @@ RUN apk add --no-cache git cmake gcc-arm-none-eabi g++-arm-none-eabi newlib-arm-
 RUN mkdir -p /pico/GP2040/build
 
 WORKDIR /pico
-RUN git clone --depth 1 --branch ${params.gitLabel:-master} https://github.com/raspberrypi/pico-sdk.git
+RUN git clone --depth 1 --branch ${GIT_LABEL:-master} https://github.com/raspberrypi/pico-sdk.git
 RUN cd pico-sdk && git submodule update --init
 
 ENV PICO_SDK_PATH=/pico/pico-sdk
