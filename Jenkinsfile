@@ -13,6 +13,9 @@ pipeline {
     stages {
         stage('Docker Build') {
             steps {
+                script {
+                    currentBuild.displayName = "${params.gitLabel}"
+                }
                 sh "docker build --build-arg debug_mode=--no-dev -t rmamba/gp2040-compile:latest ."
             }
         }
